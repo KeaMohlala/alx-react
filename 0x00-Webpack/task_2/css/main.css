@@ -1,0 +1,14 @@
+#clicker {
+  display: inline-block;
+}
+
+#count {
+  display: inline-block;
+  font-weight: bold;
+}
+
+#logo {
+  background-image: url('/assets/holberton-logo.jpg');
+  width: 200px;
+  height: 200px;
+}
