@@ -1,24 +1,24 @@
-// Import jQuery
+// Import jQuery and lodash
 import $ from 'jquery';
+import _ from 'lodash';
+import '../css/main.css';
 
-$(document).ready(function() {
-  // Add elements to the body
-  $('body').append(`
-    <div id='logo'></div>
-    <p>Holberton Dashboard</p>
-    <p>Dashboard data for the students</p>
-    <button id='clicker'>Click here to get started</button>
-    <p id='count'>0</p>
-    <p>Copyright - Holberton School</p>
-  `);
+// add elements to body
+$('body').append('<div id="logo"></div>');
+$("body").append('<p>Holberton Dashboard</p>');
+$("body").append('<p>Dashboard data for the students</p>');
+$('body').append('<button>Click here to get started</button>');
+$('body').append('<p id="count"></p>');
+$("body").append('<p>Copyright - Holberton School</p>');
 
-  // Function to update counter
-  function updateCounter() {
-    const countElement = $('#count');
-    const currentCount = parseInt(countElement.text(), 10);
-    countElement.text(currentCount + 1 + ' clicks on the button');
-  }
 
-  // Bind click event with lodash debounce
-  $(document).on('click', '#clicker', _.debounce(updateCounter, 300));
-});
+let count = 0;
+
+// Function to update counter
+function updateCounter() {
+  count++;
+  $('#count').text(`${count} clicks on the button`);
+}
+
+// Bind click event with lodash debounce
+$('button').on('click', _.debounce(updateCounter, 500));
