@@ -1,8 +1,9 @@
 {
   "dependencies": {
-    "gh-pages": "^6.1.1"
+    "gh-pages": "^6.1.1",
+    "react-scripts": "^5.0.1"
   },
-  "homepage": "https://KeaMohlala.github.io/alx-react/",
+  "homepage": "https://keamohlala.github.io/alx-react/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
