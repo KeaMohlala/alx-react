@@ -10,6 +10,7 @@ h1 {
   line-height: 20px;
   font-weight: 800;
   font-size: 20px;
+  margin-top: 2rem;
 }
 
 .App-footer {
@@ -33,4 +34,20 @@ hr {
   font-size: 14px;
   margin-top: 10px;
   margin-bottom: 50px;
+}
+
+.form-horizontal {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  align-items: center;
+}
+
+.form-group label {
+  margin-right: 10px;
 }
