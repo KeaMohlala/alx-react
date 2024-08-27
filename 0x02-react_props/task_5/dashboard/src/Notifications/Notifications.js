@@ -1,6 +1,6 @@
 import React from "react";
 import { getLatestNotification } from "./utils";
-import closeIcon from "./close-icon.png";
+import closeIcon from "../assets/close-icon.png";
 import NotificationItem from "./NotificationItem";
 import NotificationItemShape from "./NotificationItemShape";
 import PropTypes from "prop-types";
