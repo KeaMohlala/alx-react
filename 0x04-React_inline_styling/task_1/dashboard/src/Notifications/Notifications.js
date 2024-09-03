@@ -20,7 +20,6 @@ export default class Notifications extends Component {
   markAsRead(id) {
     console.log(`Notification ${id} has been marked as read`);
   }
-
   render() {
     const { listNotifications } = this.props;
 

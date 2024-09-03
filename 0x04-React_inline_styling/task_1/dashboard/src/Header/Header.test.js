@@ -1,8 +1,13 @@
 import React from "react";
 import { shallow } from "enzyme";
+import { StyleSheetTestUtils } from "aphrodite";
 import Header from "./Header";
 
 describe("Header component", () => {
+  beforeEach(() => {
+    StyleSheetTestUtils.suppressStyleInjection();
+  });
+
   it("renders without crashing", () => {
     shallow(<Header />);
   });

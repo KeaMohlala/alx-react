@@ -1,5 +1,6 @@
 import React from "react";
 import { shallow } from "enzyme";
+import { StyleSheetTestUtils } from "aphrodite";
 import App from "./App";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
@@ -8,6 +9,13 @@ import CourseList from "../CourseList/CourseList";
 import Notifications from "..Notifications.test/Notifications/Notifications";
 
 describe("App component", () => {
+  beforeEach(() => {
+    StyleSheetTestUtils.suppressStyleInjection();
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
   it("renders without crashing", () => {
     shallow(<App />);
   });
@@ -46,21 +54,13 @@ describe("App component", () => {
     const wrapper = shallow(<App isLoggedIn={false} />);
     expect(wrapper.find(Login).length).toBe(1);
   });
-  let mockLogOut;
-
-  beforeEach(() => {
-    mockLogOut = jest.fn();
-    jest.spyOn(window, "alert").mockImplementation(() => {});
-  });
-
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
 
   it("calls logOut and shows alert when Control and h keys are pressed", () => {
+    const mockLogOut = jest.fn();
     const wrapper = shallow(<App isLoggedIn={true} logOut={mockLogOut} />);
     const event = new KeyboardEvent("keydown", { ctrlKey: true, key: "h" });
 
+    jest.spyOn(window, "alert").mockImplementation(() => {});
     document.dispatchEvent(event);
 
     expect(window.alert).toHaveBeenCalledWith("Logging you out");
