@@ -1,8 +1,13 @@
 export default function accessImmutableObject(object, array) {
-    return array.reduce((acc, key) => {
-        if (acc && typeof acc === 'object') {
-            return acc[key];
-        }
-        return undefined;
-    }, object);
+  let currentValue = object;
+
+  for (let i = 0; i < array.length; i++) {
+    const key = array[i];
+    if (!currentValue.has(key)) {
+      return undefined;
+    }
+    currentValue = currentValue.get(key);
+  }
+
+  return currentValue;
 }
