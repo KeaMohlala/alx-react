@@ -10,22 +10,28 @@ import BodySectionWithMarginBottom from "../BodySection/BodySectionWithMarginBot
 import BodySection from "../BodySection/BodySection";
 import AppContext, { defaultUser } from "./AppContext";
 import { connect } from "react-redux"; // Import connect from react-redux
+import { displayNotificationDrawer, hideNotificationDrawer } from "../actions/uiActionCreators"; // Import the action creators
 
 class App extends Component {
   static propTypes = {
     isLoggedIn: PropTypes.bool,
     logOut: PropTypes.func,
+    displayNotificationDrawer: PropTypes.func.isRequired,
+    hideNotificationDrawer: PropTypes.func.isRequired,
+    displayDrawer: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
     isLoggedIn: false,
     logOut: () => {},
+    displayNotificationDrawer: () => {},
+    hideNotificationDrawer: () => {},
+    displayDrawer: false,
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      displayDrawer: false,
       user: defaultUser,
       logOut: this.logOut,
       listNotifications: [
@@ -39,8 +45,6 @@ class App extends Component {
       ],
     };
     this.markNotificationAsRead = this.markNotificationAsRead.bind(this);
-    this.handleDisplayDrawer = this.handleDisplayDrawer.bind(this);
-    this.handleHideDrawer = this.handleHideDrawer.bind(this);
   }
 
   markNotificationAsRead(id) {
@@ -49,14 +53,6 @@ class App extends Component {
         (notification) => notification.id !== id
       ),
     }));
-  }
-
-  handleDisplayDrawer() {
-    this.setState({ displayDrawer: true });
-  }
-
-  handleHideDrawer() {
-    this.setState({ displayDrawer: false });
   }
 
   logIn(email, password) {
@@ -86,7 +82,7 @@ class App extends Component {
   };
 
   render() {
-    const { isLoggedIn, displayDrawer } = this.props;
+    const { isLoggedIn, displayDrawer, displayNotificationDrawer, hideNotificationDrawer } = this.props;
     const { user } = this.state;
 
     const listCourses = [
@@ -96,14 +92,12 @@ class App extends Component {
     ];
 
     return (
-      <AppContext.Provider
-        value={{ user: this.state.user, logOut: this.state.logOut }}
-      >
+      <AppContext.Provider value={{ user: this.state.user, logOut: this.state.logOut }}>
         <React.Fragment>
           <Notifications
-            displayDrawer={this.state.displayDrawer}
-            handleDisplayDrawer={this.handleDisplayDrawer}
-            handleHideDrawer={this.handleHideDrawer}
+            displayDrawer={displayDrawer}
+            handleDisplayDrawer={displayNotificationDrawer}  // Use Redux action
+            handleHideDrawer={hideNotificationDrawer}  // Use Redux action
             listNotifications={this.state.listNotifications}
             markNotificationAsRead={this.markNotificationAsRead}
           />
@@ -120,9 +114,7 @@ class App extends Component {
             )}
             <BodySection title="News from the School">
               <p>
-                Here is some news from the school. Lorem ipsum dolor sit amet,
-                consectetur adipiscing elit. Proin id lacus nec sapien euismod
-                tincidunt. Nulla facilisi.
+                Here is some news from the school. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin id lacus nec sapien euismod tincidunt. Nulla facilisi.
               </p>
             </BodySection>
           </div>
@@ -136,13 +128,19 @@ class App extends Component {
 // Add mapStateToProps function to get the isLoggedIn property from the Redux store
 export const mapStateToProps = (state) => {
   return {
-    isLoggedIn: state.ui.get('isLoggedIn'),
-    displayDrawer: state.get("isNotificationDrawerVisible"),
+    isLoggedIn: state.ui.get("isLoggedIn"),
+    displayDrawer: state.ui.get("isNotificationDrawerVisible"),
   };
 };
 
+// Simplified mapDispatchToProps using object shorthand
+const mapDispatchToProps = {
+  displayNotificationDrawer,
+  hideNotificationDrawer,
+};
+
 // Connect App component to Redux store
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
 
 const styles = StyleSheet.create({
   appBody: {

@@ -1,8 +1,8 @@
 import React from "react";
 import { shallow } from "enzyme";
 import { StyleSheetTestUtils } from "aphrodite";
-import App, { mapStateToProps } from "./App"; // Import mapStateToProps
-import { fromJS } from "immutable"; // Import Immutable.js
+import App, { mapStateToProps } from "./App";
+import { fromJS } from "immutable";
 
 describe("App component", () => {
   beforeEach(() => {
@@ -22,23 +22,6 @@ describe("App component", () => {
     expect(wrapper.find("Notifications").length).toBe(1);
   });
 
-  it("verifies that the default state for displayDrawer is false", () => {
-    const wrapper = shallow(<App />);
-    expect(wrapper.state("displayDrawer")).toEqual(false);
-  });
-
-  it("verifies that after calling handleDisplayDrawer, the state is true", () => {
-    const wrapper = shallow(<App />);
-    wrapper.instance().handleDisplayDrawer();
-    expect(wrapper.state("displayDrawer")).toEqual(true);
-  });
-
-  it("verifies that after calling handleHideDrawer, the state is false", () => {
-    const wrapper = shallow(<App />);
-    wrapper.instance().handleHideDrawer();
-    expect(wrapper.state("displayDrawer")).toEqual(false);
-  });
-
   it("marks a notification as read and updates the state", () => {
     const wrapper = shallow(<App />);
     wrapper.instance().markNotificationAsRead(2);
@@ -51,16 +34,39 @@ describe("App component", () => {
       },
     ]);
   });
+
+  // Test for Redux state prop `displayDrawer`
+  it("verifies that the default prop for displayDrawer is false", () => {
+    const wrapper = shallow(<App displayDrawer={false} />);
+    expect(wrapper.prop("displayDrawer")).toEqual(false);
+  });
+
+  it("verifies that after calling displayNotificationDrawer, the displayDrawer prop is true", () => {
+    const mockDisplayNotificationDrawer = jest.fn();
+    const wrapper = shallow(<App displayDrawer={false} displayNotificationDrawer={mockDisplayNotificationDrawer} />);
+    wrapper.prop("displayNotificationDrawer")();  // Trigger the displayNotificationDrawer prop function
+    expect(mockDisplayNotificationDrawer).toHaveBeenCalled();
+  });
+
+  it("verifies that after calling hideNotificationDrawer, the displayDrawer prop is false", () => {
+    const mockHideNotificationDrawer = jest.fn();
+    const wrapper = shallow(<App displayDrawer={true} hideNotificationDrawer={mockHideNotificationDrawer} />);
+    wrapper.prop("hideNotificationDrawer")();  // Trigger the hideNotificationDrawer prop function
+    expect(mockHideNotificationDrawer).toHaveBeenCalled();
+  });
 });
 
 // New test suite for mapStateToProps
 describe("mapStateToProps function", () => {
   it("should return the correct props from state", () => {
     let state = fromJS({
-      isUserLoggedIn: true,
+      ui: {
+        isUserLoggedIn: true,
+        isNotificationDrawerVisible: true,
+      },
     });
 
-    const expectedProps = { isLoggedIn: true };
+    const expectedProps = { isLoggedIn: true, displayDrawer: true };
     const result = mapStateToProps(state);
 
     expect(result).toEqual(expectedProps);
